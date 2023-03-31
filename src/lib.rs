@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod test;
 
-// #[derive(new)]
+/// Iterator that acts like a traditional for loop
 pub struct ForLoopIterator<T> 
 {
     current_value: T,
