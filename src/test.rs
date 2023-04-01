@@ -69,3 +69,22 @@ fn from_docs() {
     assert_eq!(iter.next(), Some(2));
     assert_eq!(iter.next(), None);
 }
+#[test]
+// 0.2.0 adds ability for closures to capture environment
+fn close_capture() {
+	let step = 3i32;
+	let mut iter = ForLoopIterator::new(
+        0,
+        |i| i <= &30,
+        move |i| i + step
+    );
+    assert_eq!(iter.next(), Some(0));
+    assert_eq!(iter.next(), Some(3));
+    assert_eq!(iter.next(), Some(6));
+    let mut iter = iter.skip(7);
+    assert_eq!(iter.next(), Some(30));
+    assert_eq!(iter.next(), None);
+
+
+
+}
