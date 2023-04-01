@@ -1,14 +1,13 @@
 #[cfg(test)]
 mod test;
-
 /// Iterator that acts like a traditional for loop
-pub struct ForLoopIterator<T> 
+pub struct ForLoopIterator<Item> 
 {
-    current_value: T,
-    while_predicate: fn(&T) -> bool,
-    next_value_function: fn(&T) -> T
+    current_value: Item,
+    while_predicate: Box<dyn Fn(&Item) -> bool>,
+    next_value_function: Box<dyn Fn(&Item) -> Item>
 }
-impl<T> ForLoopIterator<T> {
+impl<Item> ForLoopIterator<Item> {
     /// Creates an iterator that behaves similarly to a traditional for loop
     /// * `init`: initial value
     /// * `pred`: predicate that returns true if the value should be outputted
@@ -39,16 +38,20 @@ impl<T> ForLoopIterator<T> {
 	/// assert_eq!(it.next(), Some(MyStruct(2)));
     /// // etc
     /// ```
-    pub fn new(init: T, pred: fn(&T) -> bool, next: fn(&T) -> T) -> ForLoopIterator<T> {
+    pub fn new(init: Item, pred: impl Fn(&Item) -> bool + 'static, next: impl Fn(&Item) -> Item + 'static) -> ForLoopIterator<Item> 
+        // where
+        //     PredType: Fn(Item) -> bool,/*Fn<Item, Output = bool>*/
+        //     NextFnType: Fn(Item) -> Item
+    {
         ForLoopIterator {
             current_value: init,
-            while_predicate: pred,
-            next_value_function: next
+            while_predicate: Box::new(pred),
+            next_value_function: Box::new(next)
         }
     }
 }
-impl<T> Iterator for ForLoopIterator<T> {
-    type Item = T;
+impl<Item> Iterator for ForLoopIterator<Item> {
+    type Item = Item;
 
     fn next(&mut self) -> Option<Self::Item> {
         use std::mem;
