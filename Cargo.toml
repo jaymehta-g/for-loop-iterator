@@ -1,9 +1,10 @@
 [package]
 name = "for-loop-iterator"
-version = "0.2.1"
+version = "0.2.2"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 authors = ["jay"]
 description = "Iterators like traditional for loops"
 repository = "https://github.com/jaymehta-g/for-loop-iterator"
 readme = "README.md"
+documentation = "https://docs.rs/for-loop-iterator/"
